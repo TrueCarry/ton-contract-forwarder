@@ -67,5 +67,47 @@ describe('TonForwarder', () => {
         throw e
       }
     })
+
+    test('Subsequest sends should return', async () => {
+      try {
+        const blockchain = await Blockchain.create()
+        const buyer = await blockchain.treasury('buyer')
+        const target = await blockchain.treasury('target')
+
+        const createdAt = 1674577770
+        const forwardAddress = target.address //new Address(0, Buffer.from([22]))
+        const forwarder = new TonForwarder({
+          createdAt: createdAt,
+          forwardAddress: forwardAddress,
+          isComplete: false,
+          queryId: 1000n,
+          wantedAmount: 1023400000n,
+        })
+
+        const message = await buyer.send({
+          to: forwarder.address,
+          value: 1023400000n,
+          init: forwarder.stateInit,
+        })
+        expect(message.transactions).toHaveTransaction({
+          from: forwarder.address,
+          to: target.address,
+        })
+
+        const message2 = await buyer.send({
+          to: forwarder.address,
+          value: 1023400000n,
+          init: forwarder.stateInit,
+        })
+        expect(message2.transactions).toHaveTransaction({
+          from: forwarder.address,
+          // to: forwardAddress,
+          to: buyer.address,
+        })
+      } catch (e) {
+        console.log('er', e)
+        throw e
+      }
+    })
   })
 })
