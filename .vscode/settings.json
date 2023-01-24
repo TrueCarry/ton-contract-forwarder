@@ -1,0 +1,11 @@
+{
+  "files.eol": "\n",
+  "files.trimTrailingWhitespace": true,
+  "javascript.format.enable": false,
+  "typescript.format.enable": false,
+  "editor.codeActionsOnSave": {
+    "source.fixAll": true
+  },
+  "editor.formatOnSave": false,
+  "editor.defaultFormatter": null
+}
